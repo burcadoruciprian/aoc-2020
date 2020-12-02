@@ -1,13 +1,8 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 fn main() {
     //Read an parse the input
     let mut passwords: Vec<(usize, usize, char, String)> = Vec::new();
-    let file = File::open("./src/input.txt").unwrap();
-    let reader = BufReader::new(file);
-    for l in reader.lines() {
-        let line = l.unwrap(); // Ignore errors.
+    let raw_input = std::fs::read_to_string("src/input.txt").expect("Error reading the file!");
+    for line in raw_input.lines() {
         let items: Vec<&str> = line
             .split(&['-', ':', ' '][..])
             .filter(|c| !c.is_empty())
@@ -20,8 +15,6 @@ fn main() {
             String::from(items[3]),
         ));
     }
-
-    println!("{:?}", passwords);
 
     let part1 = passwords.iter().fold(0, |acc, x| {
         let c = x.3.matches(x.2).count();
