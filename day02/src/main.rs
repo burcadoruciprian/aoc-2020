@@ -37,5 +37,5 @@ fn main() {
             return acc;
         }
     });
-    println!("Part1: {}", part2)
+    println!("Part2: {}", part2)
 }
