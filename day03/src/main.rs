@@ -32,7 +32,7 @@ fn main() {
         (0, 0, 1, 2, 0),
     ];
     loop {
-        
+
         //TEST FOR STOP
         if slopes.iter().all(|x| x.1 > original_grid_size_y) {
             break;
