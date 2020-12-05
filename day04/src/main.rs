@@ -29,8 +29,8 @@ fn is_valid_passport_2(passport: &HashMap<&str, &str>) -> bool {
 
     let re = Regex::new(r"(\d+)(cm|in)").unwrap();
     let result = re.captures(passport["hgt"]);
-    if result.is_none(){
-      return false;
+    if result.is_none() {
+        return false;
     }
     let result = result.unwrap();
 
