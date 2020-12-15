@@ -8,15 +8,15 @@ fn main() {
 fn speak(input: Vec<usize>, turns: usize) -> usize {
     let mut memory = HashMap::new();
     input.iter().enumerate().for_each(|(i, v)| {
-        memory.insert(*v, i);
+        memory.insert(*v, i + 1);
     });
 
-    let mut turn = input.len() - 1;
+    let mut turn = input.len();
     let mut speak = *input.iter().last().unwrap();
     //dbg!(turn);
     //dbg!(speak);
     loop {
-        if turn == turns -1 {
+        if turn == turns {
             break;
         }
         let last = memory.entry(speak).or_insert(turn); //Use muttable reference to speedup the hash update
