@@ -143,18 +143,8 @@ impl Cube for Coord4d {
 
 fn main() {
     let raw_input = std::fs::read_to_string("src/input.txt").expect("Error reading the file!");
-    println!("{:?}", part1(&raw_input));
-    println!("{:?}", part2(&raw_input));
-}
-
-fn part1(input: &str) -> usize {
-    let initial = <(i32, i32, i32)>::parse_input(input);
-    Cube::run(initial).len()
-}
-
-fn part2(input: &str) -> usize {
-    let initial = <(i32, i32, i32, i32)>::parse_input(input);
-    Cube::run(initial).len()
+    println!("{:?}", Cube::run(Coord3d::parse_input(&raw_input)).len());
+    println!("{:?}", Cube::run(Coord4d::parse_input(&raw_input)).len());
 }
 
 #[cfg(test)]
@@ -166,7 +156,7 @@ mod tests {
         let input = ".#.
 ..#
 ###";
-        assert_eq!(part1(input), 112);
+        assert_eq!(Cube::run(Coord3d::parse_input(&input)).len(), 112);
     }
 
     #[test]
@@ -174,6 +164,6 @@ mod tests {
         let input = ".#.
 ..#
 ###";
-        assert_eq!(part2(input), 848);
+        assert_eq!(Cube::run(Coord4d::parse_input(&input)).len(), 848);
     }
 }
