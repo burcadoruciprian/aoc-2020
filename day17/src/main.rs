@@ -2,10 +2,11 @@ use itertools::{iproduct, Itertools};
 use std::collections::HashSet;
 use std::hash::Hash;
 
+
 type Coord3d = (i32, i32, i32);
 type Coord4d = (i32, i32, i32, i32);
 
-trait Cube: Eq + Hash + Clone + Sized {
+trait Cube: Eq + Hash + Clone {
     fn new(x: i32, y: i32) -> Self;
 
     fn get_neighbours(&self) -> Vec<Self>;
