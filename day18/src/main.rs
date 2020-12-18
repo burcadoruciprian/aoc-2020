@@ -14,7 +14,7 @@ fn evaluate_expr1(expr: &str) -> Result<i64, String> {
 }
 
 fn evaluate_expr2(expr: &str) -> Result<i64, String> {
-const MY_SUM: &str = "my_prod";
+const MY_SUM: &str = "my_sum";
     let mut engine = Engine::new();
     engine
         .register_custom_operator(MY_SUM, 181)?
