@@ -48,10 +48,7 @@ fn main() {
         })
     );
 
-    *rules.get_mut(&8).unwrap() = vec![
-        vec![42.to_string()],
-        vec![42.to_string(), 8.to_string()],
-    ];
+    *rules.get_mut(&8).unwrap() = vec![vec![42.to_string()], vec![42.to_string(), 8.to_string()]];
     *rules.get_mut(&11).unwrap() = vec![
         vec![42.to_string(), 31.to_string()],
         vec![42.to_string(), 11.to_string(), 31.to_string()],
@@ -69,10 +66,11 @@ fn main() {
 }
 
 fn is_match(message: String, rule: VecDeque<String>, rules: &Rules) -> bool {
-    if rule.len() > message.len() {
+    let (rl, ml) = (rule.len(), message.len());
+    if rl > ml {
         return false;
-    } else if rule.len() == 0 || message.len() == 0 {
-        return rule.len() == 0 && message.len() == 0;
+    } else if rl == 0 || ml == 0 {
+        return rl == ml;
     }
 
     let mut rule = rule.clone();
