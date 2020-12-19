@@ -49,12 +49,12 @@ fn main() {
     );
 
     *rules.get_mut(&8).unwrap() = vec![
-        vec!["42".to_string()],
-        vec!["42".to_string(), "8".to_string()],
+        vec![42.to_string()],
+        vec![42.to_string(), 8.to_string()],
     ];
     *rules.get_mut(&11).unwrap() = vec![
-        vec!["42".to_string(), "31".to_string()],
-        vec!["42".to_string(), "11".to_string(), "31".to_string()],
+        vec![42.to_string(), 31.to_string()],
+        vec![42.to_string(), 11.to_string(), 31.to_string()],
     ];
 
     println!(
