@@ -1,12 +1,11 @@
 use counter::Counter;
-use std::collections::HashSet;
 
 type TileContent = [[char; 10]; 10];
 #[derive(Debug)]
 struct Tile {
     id: u32,
     tile: TileContent,
-    encoded_edges: (u32, u32, u32, u32),
+    edges: (u32, u32, u32, u32),
 }
 
 impl Tile {
@@ -14,6 +13,30 @@ impl Tile {
         self.tile
             .iter()
             .for_each(|l| println!("{}", l.iter().collect::<String>()))
+    }
+
+    fn rotate_clockwise(&mut self) {
+        self.tile.reverse();
+        for i in 1..self.tile.len() {
+            let (left, right) = self.tile.split_at_mut(i);
+            for (j, left_item) in left.iter_mut().enumerate().take(i) {
+                std::mem::swap(&mut left_item[i], &mut right[0][j]);
+            }
+        }
+
+        std::mem::swap(&mut self.edges.0, &mut self.edges.3);
+        std::mem::swap(&mut self.edges.0, &mut self.edges.1);
+        std::mem::swap(&mut self.edges.1, &mut self.edges.2);
+    }
+
+    fn flip_vertical(&mut self) {
+        std::mem::swap(&mut self.edges.1, &mut self.edges.3);
+        self.tile.iter_mut().for_each(|t| t.reverse());
+    }
+
+    fn flip_horizontal(&mut self) {
+        std::mem::swap(&mut self.edges.0, &mut self.edges.2);
+        self.tile.reverse();
     }
 
     fn get_encoded_edges(tile: &TileContent) -> (u32, u32, u32, u32) {
@@ -27,7 +50,7 @@ impl Tile {
         tile.iter().enumerate().for_each(|(i, l)| col[i] = l[9]);
         let r = Tile::encode(col);
 
-        (t, b, l, r)
+        (t, r, b, l)
     }
 
     fn encode(line: [char; 10]) -> u32 {
@@ -66,7 +89,7 @@ fn parse_tile(input: &str) -> Tile {
     Tile {
         id: id,
         tile: tile,
-        encoded_edges: Tile::get_encoded_edges(&tile),
+        edges: Tile::get_encoded_edges(&tile),
     }
 }
 
@@ -89,16 +112,16 @@ fn part1(input: &str) -> u64 {
         .iter()
         .flat_map(|t| {
             vec![
-                t.encoded_edges.0,
-                t.encoded_edges.1,
-                t.encoded_edges.2,
-                t.encoded_edges.3,
+                t.edges.0,
+                t.edges.1,
+                t.edges.2,
+                t.edges.3,
             ]
         })
         .collect::<Counter<_>>();
 
     return tiles.into_iter().fold(1, |acc, tl| {
-        let (t, b, l, r) = tl.encoded_edges;
+        let (t, b, l, r) = tl.edges;
         if counter[&t] + counter[&b] + counter[&l] + counter[&r] == 6 {
             return acc * tl.id as u64;
         } else {
@@ -114,18 +137,21 @@ fn part2(input: &str) -> u64 {
         .iter()
         .flat_map(|t| {
             vec![
-                t.encoded_edges.0,
-                t.encoded_edges.1,
-                t.encoded_edges.2,
-                t.encoded_edges.3,
+                t.edges.0,
+                t.edges.1,
+                t.edges.2,
+                t.edges.3,
             ]
         })
         .collect::<Counter<_>>();
 
-    let corner = tiles.iter().find(|tl| {
-        let (t, b, l, r) = tl.encoded_edges;
-        return counter[&t] + counter[&b] + counter[&l] + counter[&r] == 6;
-    }).unwrap();
+    let corner = tiles
+        .iter()
+        .find(|tl| {
+            let (t, b, l, r) = tl.edges;
+            return counter[&t] + counter[&b] + counter[&l] + counter[&r] == 6;
+        })
+        .unwrap();
 
     let edge_size = (tiles.len() as f64).sqrt() as u32;
     dbg!(edge_size);
@@ -136,12 +162,16 @@ fn part2(input: &str) -> u64 {
 fn main() {
     let raw_input = std::fs::read_to_string("src/input.txt").expect("Error reading the file!");
     //println!("Part1 {}", part1(raw_input.as_str()));
-    println!("Part2 {}", part2(raw_input.as_str()));
+    //println!("Part2 {}", part2(raw_input.as_str()));
+
+
+
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
 
     #[test]
     fn test() {
