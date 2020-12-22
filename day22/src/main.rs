@@ -17,7 +17,7 @@ fn parse_input(input: &str) -> (VecDeque<u32>, VecDeque<u32>) {
     )
 }
 
-fn part1(p1: VecDeque<u32>, p2: VecDeque<u32>) -> u32 {
+fn part1(p1: &VecDeque<u32>, p2: &VecDeque<u32>) -> u32 {
     let mut p1 = p1.clone();
     let mut p2 = p2.clone();
     loop {
@@ -38,12 +38,12 @@ fn part1(p1: VecDeque<u32>, p2: VecDeque<u32>) -> u32 {
     }
 }
 
-fn part2(p1: VecDeque<u32>, p2: VecDeque<u32>) -> u32 {
-    let (_, winner) = recursive_combat(p1, p2);
+fn part2(p1: &VecDeque<u32>, p2: &VecDeque<u32>) -> u32 {
+    let (_, winner) = recursive_combat(p1.clone(), p2.clone());
     return get_score(&winner);
 }
 
-fn recursive_combat(mut p1: VecDeque<u32>, mut p2:VecDeque<u32>) -> (u32, VecDeque<u32>) {
+fn recursive_combat(mut p1: VecDeque<u32>, mut p2: VecDeque<u32>) -> (u32, VecDeque<u32>) {
     let mut history = HashSet::new();
     loop {
         let game_hash = get_game_hash(&p1, &p2);
@@ -52,8 +52,8 @@ fn recursive_combat(mut p1: VecDeque<u32>, mut p2:VecDeque<u32>) -> (u32, VecDeq
         }
 
         match (p1.is_empty(), p2.is_empty()) {
-            (true, false) => return (2, p2.clone()),
             (false, true) => return (1, p1.clone()),
+            (true, false) => return (2, p2.clone()),
             (false, false) => {}
             (true, true) => panic!(),
         };
@@ -62,7 +62,11 @@ fn recursive_combat(mut p1: VecDeque<u32>, mut p2:VecDeque<u32>) -> (u32, VecDeq
         let c2 = p2.pop_front().unwrap();
 
         let winner = if p1.len() as u32 >= c1 && p2.len() as u32 >= c2 {
-          recursive_combat(p1.iter().take(c1 as usize).cloned().collect(), p2.iter().take(c2 as usize).cloned().collect()).0
+            recursive_combat(
+                p1.iter().take(c1 as usize).cloned().collect(),
+                p2.iter().take(c2 as usize).cloned().collect(),
+            )
+            .0
         } else {
             match c1 < c2 {
                 true => 2,
@@ -96,6 +100,6 @@ fn get_score(p: &VecDeque<u32>) -> u32 {
 fn main() {
     let raw_input = std::fs::read_to_string("src/input.txt").expect("Error reading the file!");
     let (p1, p2) = parse_input(raw_input.as_str());
-    println!("Part1 {}", part1(p1.clone(), p2.clone()));
-    println!("Part2 {}", part2(p1, p2));
+    println!("Part1 {}", part1(&p1, &p2));
+    println!("Part2 {}", part2(&p1, &p2));
 }
