@@ -148,7 +148,7 @@ fn part2(input: &str) -> u64 {
     let corner = tiles
         .iter()
         .find(|tl| {
-            let (t, b, l, r) = tl.edges;
+            let (t, r, b, l) = tl.edges;
             return counter[&t] + counter[&b] + counter[&l] + counter[&r] == 6;
         })
         .unwrap();
